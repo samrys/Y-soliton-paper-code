@@ -1,5 +1,3 @@
-%% Compares Mach reflection numerical results with modulation theory results
-
 % Extract amplitude and slope from bent soliton evolution
 data_dir = 'C:\Users\samry\Documents\MATLAB\KP2\data\miles_resonant\v_shape_a_1_q_p7';
 load([data_dir,'\parameters.mat'],'Lx','Ly');
@@ -15,7 +13,6 @@ dx = 2*Lx/Nx;
 x = dx*[-Nx/2:Nx/2-1];
 dy = 2*Ly/Ny;
 y = dy*[-Ny/2:Ny/2-1];
-
 % Grid for analysis
 xlow = -360;
 xhigh = 600;
@@ -30,6 +27,8 @@ ky = pi/Ly*fftshift([-Ny/2:Ny/2-1]);
 [KX,KY] = meshgrid(kx,ky);
 
 xvec = linspace(xlow,xhigh,10000);
+
+
 
 % Set up temporal grid for plotting
 dt = 10; 
@@ -130,7 +129,10 @@ q_init = (q0.*(yvec<=1)-q0.*(yvec>0)).*ones(size(yvec));
 an_init = a0.*ones(size(yvec));
 qn_init = q0*tanh(-yvec./1);
 
-
+% 
+% xshift = -20;
+% xmat = repmat(xvec,5,1);
+% xmat = xmat-(amp<.43).*xshift;
 
 fh=figure(1);
 clf();
@@ -146,7 +148,7 @@ clf
 axes('Position',[ml,mb,spanx,bot]);
 hold on;
 plot(yvec,ones(size(yvec))*(sqrt(a0)+q0)^2,'b-.',...
-        'linewidth',f/2);
+        'linewidth',.75*f);
 for jj=2:Np
 plot(yvec,anumerics1(jj,:),'k-',...
      'linewidth',f/2);
@@ -182,7 +184,7 @@ text(50,1.7,['$',num2str(round(tout(4))),'$'],'interpreter','latex',...
 %Simple wave inset
 axes('Position',[ml,mb+pb+bot,spanx,top]);
 hold on;
-plot(yvec,q0^2.*ones(size(yvec)),'b-.','linewidth',f/2);
+plot(yvec,q0^2.*ones(size(yvec)),'b-.','linewidth',.75*f);
 for jj=2:Np
 plot(yvec,anumerics2(jj,:),'k-',...
      'linewidth',f/2);
@@ -212,7 +214,7 @@ hold off
 % Angle
 axes('Position',[ml+spanx+pr,mb,spanx,bot]);
 hold on;
-plot(yvec,zeros(size(yvec)),'b-.','linewidth',f/2);
+plot(yvec,zeros(size(yvec)),'b-.','linewidth',.75*f);
 for jj=2:Np
 plot(yvec,qnumerics1(jj,:),'k-',...
      'linewidth',f/2);
@@ -244,11 +246,10 @@ text(-77,.2,['$t = ',num2str(round(tout(4))),'$'],'interpreter','latex',...
      'fontsize',7*f); 
  
 hold off;
-
  %Simple wave inset
 axes('Position',[ml+spanx+pr,mb+pb+bot,spanx,top]);
 hold on;
-plot(yvec,sqrt(a0)*ones(size(yvec)),'b-.','linewidth',f/2);
+plot(yvec,sqrt(a0)*ones(size(yvec)),'b-.','linewidth',.75*f);
 for jj=2:Np
 plot(yvec,qnumerics2(jj,:),'k-',...
      'linewidth',f/2);

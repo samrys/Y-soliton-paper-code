@@ -1,4 +1,4 @@
-% Plot results from Mach reflection soliton simulation
+% Plot results from mean flow soliton simulation
 data_dir = 'C:\Users\samry\Documents\MATLAB\KP2\data\miles_resonant\v_shape_a_1_q_1p4';
 load([data_dir,'\parameters.mat'],'Lx','Ly');
 
@@ -22,8 +22,16 @@ yp = unique(round(linspace(ymin,ymax,250)));
 
 % Set up temporal grid
 dt = 10; 
+% t = linspace(1,24,25)*dt;
 tout = [0,40,100]/dt;
 Np = length(tout);
+% tout_inds = zeros(1,Np);
+% for ii=1:Np
+%     [foo,ind] = min(abs(t-tout(ii)));
+%     tout_inds(ii) = ind;
+% end
+% tout = t(tout_inds);
+
 
 % Setup figure
 ml = 0.11; % Margin left
@@ -58,11 +66,11 @@ for ii=1:Np
     
     axes('Position',[ml+(ii-1)*(spanx+pr),mb,spanx,spany]);
     contourf(x(xp)-x0,y(yp),u(yp,xp),25,'edgecolor','none');
-    colormap(cmap); 
+    colormap(cmap); %flipud(gray));%cmap);
     caxis(ran);
     set(gca,'FontSize',fontsize,'TickLabelInterpreter','latex',...
             'ytick',round([-200,0,200]),...
-            'xtick',[0,400]); 
+            'xtick',[0,400]);%,'TickLength',[0.005 0.005]); 
     xlabel('$x$','interpreter','latex');
     if ii == 1
         ylabel('$y$','interpreter','latex');
@@ -70,14 +78,35 @@ for ii=1:Np
         set(gca,'yticklabel',{'','',''});
     end
     axis([x(xmin)-x0,round(x(xmax)-x0),round(y(ymin)),round(y(ymax))]);
+    if ii==1
+       text(220,140,'$(a_0,q_0)$','interpreter',...
+      'latex',...
+      'verticalalignment','top','horizontalalignment','left',...
+      'fontsize',fontsize,'color','white');
+       text(220,-140,'$(a_0,-q_0)$','interpreter',...
+      'latex',...
+      'verticalalignment','bottom','horizontalalignment','left',...
+      'fontsize',fontsize,'color','white');
+    elseif ii==3
+   
+       text(40,140,'$(a_{\rm n},q_{\rm n})$','interpreter',...
+      'latex',...
+      'verticalalignment','top','horizontalalignment','right',...
+      'fontsize',fontsize,'color','white');       
+       text(40,-140,'$(a_{\rm n},-q_{\rm n})$','interpreter',...
+      'latex',...
+      'verticalalignment','bottom','horizontalalignment','right',...
+      'fontsize',fontsize,'color','white'); 
+    end
 end
 
 set(fh,'paperposition',[0,0,fig_width,fig_height],...
        'papersize',[fig_width,fig_height],'paperunits',...
        'centimeters','units','centimeters');
 
- doc_name = ['v_shape_a_1_q_1p4_',num2str(tout(1)*dt),...
+ doc_name = ['thesis_v_shape_a_1_q_1p4_',num2str(tout(1)*dt),...
      '_',num2str(tout(2)*dt),'_',num2str(tout(3)*dt),'.pdf'];  
   print(fh,'-dpdf',doc_name);
+ %saveas(fh,['C:\Users\samry\Documents\KP\matlab_plots\mean_flow\',doc_name])
 
 
